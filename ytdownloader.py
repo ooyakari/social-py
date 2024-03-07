@@ -1,18 +1,22 @@
-from pytube import YouTube  # YouTube'dan video indirmek için pytube kütüphanesini kullanıyoruz
-from Tiktok_uploader import uploadVideo
-import ffmpeg  # Video işleme için ffmpeg kütüphanesini kullanıyoruz
+# YouTube'dan video indirmek için pytube kütüphanesini kullanıyoruz
+from pytube import YouTube  
 
-# YouTube video URL
-video_url = input("Video URL'ini yapıştırınız: ")  # Kullanıcıdan YouTube video URL'sini alıyoruz
+#Videoyu tiktok a upload etmek icin tiktok_uploader kullaniyoruz.
+from Tiktok_uploader import uploadVideo  
+# Video işleme için ffmpeg kütüphanesini kullanıyoruz
+import ffmpeg  
+
+# YouTube video URL - Kullanıcıdan YouTube video URL'sini alıyoruz
+video_url = input("Video URL'ini yapıştırınız: ")  
 
 # YouTube video nesnesini oluştur
-yt = YouTube(video_url)  # YouTube video nesnesini oluşturuyoruz
+yt = YouTube(video_url)  
 
 # Video başlığını al
-video_title = yt.title  # YouTube videosunun başlığını alıyoruz
+video_title = yt.title 
 
-# Videoyu indir
-yt.streams.get_highest_resolution().download(filename="original.mp4")  # En yüksek çözünürlüklü videoyu indiriyoruz ve "original.mp4" olarak kaydediyoruz
+# Videoyu indir - En yüksek çözünürlüklü videoyu indiriyoruz ve "original.mp4" olarak kaydediyoruz
+yt.streams.get_highest_resolution().download(filename="original.mp4")  
 
 # İndirilen videoyu TikTok formatına dönüştürme
 def prepare_for_tiktok(input_file, output_file, title):
@@ -26,17 +30,17 @@ def prepare_for_tiktok(input_file, output_file, title):
     # Sesin girişine ve çıkışına fade in ve fade out efektleri ekle
     audio_stream = audio_stream.filter('afade', t='in', st=0, d=3).filter('afade', t='out', st=57, d=3)
 
-    # İlk 60 saniyeyi kesme
-    cut_video = original_video.trim(start_frame=0, end_frame=60*yt.streams.get_highest_resolution().fps)  # Videoyu ilk 60 saniyeye kesiyoruz
+    # İlk 60 saniyeyi kesiyoruz. (Tiktok 60 saniye aliyordu sanirim)
+    cut_video = original_video.trim(start_frame=0, end_frame=60*yt.streams.get_highest_resolution().fps) 
 
     # Videoyu 1:1 formatına dönüştürme
-    square_video = cut_video.filter('scale', 1080, 1080).filter('pad', 1080, 1920, 0, '(1920 - ih) / 2', color='black')  # Videoyu 1:1 oranında kareye dönüştürüyoruz
+    square_video = cut_video.filter('scale', 1080, 1080).filter('pad', 1080, 1920, 0, '(1920 - ih) / 2', color='black')  
 
     # Videoyu TikTok formatına dönüştürme ve sesi ekleyerek çıktıyı al
     ffmpeg.output(square_video, audio_stream, output_file, vcodec='libx264', acodec='aac', pix_fmt='yuv420p', aspect='9:16').run()
 
-# Dönüşümü gerçekleştir ve video başlığını dosya adı olarak kullan
-prepare_for_tiktok("original.mp4", f"{video_title}_tiktok_ready.mp4", video_title)  # prepare_for_tiktok fonksiyonunu çağırarak dönüşümü gerçekleştiriyoruz
+# Dönüşümü gerçekleştir ve video başlığını dosya adı olarak kullanip, prepare_for_tiktok fonksiyonunu çağırarak dönüşümü gerçekleştiriyoruz
+prepare_for_tiktok("original.mp4", f"{video_title}_tiktok_ready.mp4", video_title)  
 
 #### Tiktok yükleme
 
