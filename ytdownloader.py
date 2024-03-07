@@ -15,7 +15,7 @@ yt = YouTube(video_url)
 # Video başlığını al
 video_title = yt.title 
 
-# Videoyu indir - En yüksek çözünürlüklü videoyu indiriyoruz ve "original.mp4" olarak kaydediyoruz
+# En yüksek çözünürlüklü videoyu indiriyoruz ve "original.mp4" olarak kaydediyoruz
 yt.streams.get_highest_resolution().download(filename="original.mp4")  
 
 # İndirilen videoyu TikTok formatına dönüştürme
@@ -39,7 +39,7 @@ def prepare_for_tiktok(input_file, output_file, title):
     # Videoyu TikTok formatına dönüştürme ve sesi ekleyerek çıktıyı al
     ffmpeg.output(square_video, audio_stream, output_file, vcodec='libx264', acodec='aac', pix_fmt='yuv420p', aspect='9:16').run()
 
-# Dönüşümü gerçekleştir ve video başlığını dosya adı olarak kullanip, prepare_for_tiktok fonksiyonunu çağırarak dönüşümü gerçekleştiriyoruz
+# prepare_for_tiktok fonksiyonunu çağırarak dönüşümü gerçekleştiriyoruz
 prepare_for_tiktok("original.mp4", f"{video_title}_tiktok_ready.mp4", video_title)  
 
 #### Tiktok yükleme
