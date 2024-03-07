@@ -8,7 +8,7 @@ Usage details will be added later.
 
 # SOURCES
 
-1 - https://python-istihza.yazbel.com/
-2 - https://github.com/MiniGlome/Tiktok-uploader
+1 - https://python-istihza.yazbel.com/ <br>
+2 - https://github.com/MiniGlome/Tiktok-uploader<br>
 3 - ChatGPT
 
